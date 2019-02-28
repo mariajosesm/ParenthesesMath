@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parentesis;
 
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 /**
  *
@@ -17,83 +15,48 @@ public class Parentesis {
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String[] args) {
-     Scanner pedir=new Scanner(System.in);
-        System.out.println("Ingrese una cadena:");
-        String cadena=pedir.nextLine();
-        
-        if(verificar(cadena)==true)
-        {
-         System.out.println("Esta Balanceada");   
-        }
-        else{
-            System.out.println("No lo esta");
-        }
+        System.out.println("(a[0] + b[2c[6]]){24 + 53} passed: " + parensMatch("(a[0] + b[2c[6]]){24 + 53}"));
+        System.out.println("f(e(d)) passed: " + parensMatch("f(e(d))"));
+        System.out.println("((b) passed: " + !parensMatch("((b)"));
+        System.out.println("(empty) passed: " + parensMatch("(empty)"));
+        System.out.println("([)] passed: " + !parensMatch("([)]"));
+        System.out.println(" passed: " + parensMatch("     "));
+        System.out.println("passed: " + parensMatch(""));
     }
     
-    public static boolean verificar(String sentence){
-        Stack <String> pila = new Stack();
-        boolean b = true;
-        int Par=0;
-        int Lla=0;
-        int Cor=0;
-          Stack <String> pilallave = new Stack();
-        boolean bLL = true;
-        Stack <String> pilacorchete = new Stack();
-        boolean bC = true;
-
-             
-      for(int a=0;a<sentence.length();a++)
-      {
-        if(sentence.charAt(a)=='(')
-        {
-            pila.push(sentence);
-            Par++;
-        }
-        else if(sentence.charAt(a)==')'){
-            if (pila.isEmpty()){
-                b = false;
-                        }
-            else{
-                pila.removeElementAt(Par-1);
+    public static boolean parensMatch(String formula){
+        Stack<String> pila = new Stack<String>();
+        
+        for (char c: formula.toCharArray ()) { 
+            if(c == '('){
+                pila.push("(");
+            }else if(c == '{'){
+                pila.push("{");
+            }else if(c == '['){
+                pila.push("[");
+            }
+            
+            if(c == ')'){
+                if(pila.peek() == "("){
+                    pila.pop();
                 }
-      
-        }
-        else if(sentence.charAt(a)=='{' )
-        {
-               pilallave.push(sentence);
-               Lla++;
-        }
-         else if(sentence.charAt(a)=='}'){
-            if (pilallave.isEmpty()){
-                bLL = false;
-                        }
-            else{
-                pilallave.removeElementAt(Lla-1);
+            }else if(c == '}'){
+                if(pila.peek() == "{"){
+                    pila.pop();
                 }
-      
-        }
-        else if(sentence.charAt(a)=='[' )
-        {
-               pilacorchete.push(sentence);
-               Cor++;
-        }
-         else if(sentence.charAt(a)==']' ){
-            if (pilacorchete.isEmpty()){
-                bC = false;
-                        }
-            else{
-                pilacorchete.removeElementAt(Cor-1);
-                }  
+            }else if(c == ']'){
+                if(pila.peek() == "["){
+                    pila.pop();
+                }
+            } 
         }
         
-        
-      }
-      
-      if(b ==true && pila.isEmpty() && bC ==true && pilacorchete.isEmpty() && bLL ==true && pilallave.isEmpty()){
-      return true;
-      }
-      else{return false;}     
+        if(pila.isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
     }
-    
 }
